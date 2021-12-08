@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -118,3 +119,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 小程序ID和秘钥
+APP_ID = 'wx72a252bb8cdfdbbd'
+SECRET = '09a72f9aacabb14903ed74e617713015'
+
+# 百度地图
+# 开发文档： http://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding
+# 百度地图的开发者AK查看页面 http://lbsyun.baidu.com/apiconsole/key
+MAP_AK = ''
+
+MEDIA_ROOT = ''
