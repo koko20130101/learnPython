@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls import url, include
 from django.views.static import serve
 from FamilyOrigin.settings import MEDIA_ROOT
 # import xadmin
@@ -23,6 +22,5 @@ from FamilyOrigin.settings import MEDIA_ROOT
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('media/<path:path>', serve, {'document_root': MEDIA_ROOT}),
-    # path('xadmin/', xadmin.site.urls),
-    url(r'^', include('users.urls'))
+    path('users/',include('users.urls'))
 ]
