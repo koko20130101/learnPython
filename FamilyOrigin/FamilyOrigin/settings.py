@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '!s6sj8)etcdzq8s#@s)9sd3+ql+(24pjdxax(38@@8$$7+jaqq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -76,8 +77,12 @@ WSGI_APPLICATION = 'FamilyOrigin.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'familyorigin',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': '127.0.0.1',
+        'PROT': '3306',
     }
 }
 
@@ -121,8 +126,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # 小程序ID和秘钥
-APP_ID = 'wx72a252bb8cdfdbbd'
-SECRET = '09a72f9aacabb14903ed74e617713015'
+APP_ID = 'wxe1e65ddcb30aee74'
+SECRET = '1d3c144f5d253c15249ce7c023edf13e'
 
 # 百度地图
 # 开发文档： http://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding

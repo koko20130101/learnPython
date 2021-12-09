@@ -1,14 +1,8 @@
 from rest_framework import fields, serializers
-from .models import UserProfile, Area
+from .models import Users
 
 
 class UserProfileModelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
-        fields = '__all__'
-
-
-class AreaModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Area
+        model = Users
         fields = '__all__'

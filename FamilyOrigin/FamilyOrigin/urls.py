@@ -22,5 +22,5 @@ from FamilyOrigin.settings import MEDIA_ROOT
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('media/<path:path>', serve, {'document_root': MEDIA_ROOT}),
-    path('users/',include('users.urls'))
+    path('user/',include('users.urls'))
 ]
