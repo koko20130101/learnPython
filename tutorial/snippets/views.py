@@ -42,3 +42,12 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'snippets': reverse('snippet-list', request=request, format=format)
     })
+
+@api_view(['GET'])
+def login(request):
+    receive = request.data
+    print(receive)
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'snippets': reverse('snippet-list', request=request, format=format)
+    })
