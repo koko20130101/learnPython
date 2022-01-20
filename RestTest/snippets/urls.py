@@ -8,29 +8,29 @@ router = DefaultRouter()
 router.register(r'snippets', views.SnippetViewSet)
 router.register(r'users', views.UserViewSet)
 
-snippet_list = views.SnippetViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
+# snippet_list = views.SnippetViewSet.as_view({
+#     'get': 'list',
+#     'post': 'create'
+# })
 
-snippet_detail = views.SnippetViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
-})
+# snippet_detail = views.SnippetViewSet.as_view({
+#     'get': 'retrieve',
+#     'put': 'update',
+#     'patch': 'partial_update',
+#     'delete': 'destroy'
+# })
 
-snippet_highlight = views.SnippetViewSet.as_view({
-    'get': 'highlight'
-}, renderer_classes=[renderers.StaticHTMLRenderer])
+# snippet_highlight = views.SnippetViewSet.as_view({
+#     'get': 'highlight'
+# }, renderer_classes=[renderers.StaticHTMLRenderer])
 
-user_list = views.UserViewSet.as_view({
-    'get': 'list'
-})
+# user_list = views.UserViewSet.as_view({
+#     'get': 'list'
+# })
 
-user_detail = views.UserViewSet.as_view({
-    'get': 'retrieve'
-})
+# user_detail = views.UserViewSet.as_view({
+#     'get': 'retrieve'
+# })
 
 # urlpatterns = [
 #     path('', views.api_root),
@@ -48,4 +48,7 @@ user_detail = views.UserViewSet.as_view({
 
 urlpatterns = [
     path('', include(router.urls)),
+]
+urlpatterns += [
+    path('api-token-auth/', views.CustomAuthToken.as_view())
 ]

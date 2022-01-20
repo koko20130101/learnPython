@@ -1,42 +1,18 @@
+from snippets import serializers
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer, UserSerializer
 from rest_framework import viewsets, generics, permissions, renderers
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from snippets.permissions import IsOwnerOrReadOnly
-
-
-class SnippetList(generics.ListCreateAPIView):
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        print(555, self.request.user)
-        serializer.save(owner=self.request.user)
-
-
-class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-
-class SnippetHighlight(generics.GenericAPIView):
-    queryset = Snippet.objects.all()
-    renderer_classes = [renderers.StaticHTMLRenderer]
-
-    def get(self, request, *args, **kwargs):
-        snippet = self.get_object()
-        return Response(snippet.highlighted)
 
 
 class SnippetViewSet(viewsets.ModelViewSet):
@@ -54,9 +30,17 @@ class SnippetViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'snippets': reverse('snippet-list', request=request, format=format)
-    })
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        print(created)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        })
