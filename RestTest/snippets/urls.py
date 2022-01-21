@@ -50,5 +50,5 @@ urlpatterns = [
     path('', include(router.urls)),
 ]
 urlpatterns += [
-    path('api-token-auth/', views.CustomAuthToken.as_view())
+    path('api-token-auth/', views.Login.as_view())
 ]

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from pygments.lexers import get_all_lexers, get_lexer_by_name
 from pygments.styles import get_all_styles
 from pygments.formatters.html import HtmlFormatter
@@ -11,7 +12,7 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 class Snippet(models.Model):
     owner = models.ForeignKey(
-        'auth.User', related_name='snippets', on_delete=models.CASCADE, null=True)
+        'snippets.User', related_name='snippets', on_delete=models.CASCADE, null=True)
     highlighted = models.TextField(default='')
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
@@ -33,3 +34,13 @@ class Snippet(models.Model):
             style=self.style, linenos=linenos, full=True, **options)
         self.highlighted = highlight(self.code, lexer, formatter)
         super(Snippet, self).save(*args, **kwargs)
+
+
+class User(AbstractUser):
+    nickName = models.CharField(max_length=50, blank=True, default='')
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        verbose_name = 'UserInfo'
