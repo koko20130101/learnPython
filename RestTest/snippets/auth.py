@@ -1,9 +1,11 @@
 import datetime
+import pytz
 # from django.utils.translation import ugettext_lazy
 from django.core.cache import cache
 from rest_framework.authentication import BaseAuthentication
-from rest_framework import exceptions
+from rest_framework import exceptions, status
 from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 from rest_framework import HTTP_HEADER_ENCODING
 
 # 获取请求头信息
@@ -43,20 +45,22 @@ class ExpiringTokenAuthentication(BaseAuthentication):
         try:
             token = self.model.objects.get(key=key)
         except self.model.DoesNotExist:
-            raise exceptions.AuthenticationFailed('认证失败')
+            raise exceptions.AuthenticationFailed(
+                {'status': status.HTTP_503_SERVICE_UNAVAILABLE, 'msg': '认证失败'})
 
         if not token.user.is_active:
-            raise exceptions.AuthenticationFailed('用户被禁用')
+            raise exceptions.AuthenticationFailed(
+                {'status': status.HTTP_403_FORBIDDEN, 'msg': '用户被禁用，请联系管理员'})
 
-        if (datetime.datetime.now() - token.created) > datetime.timedelta(hours=0.1*1):
-            raise exceptions.AuthenticationFailed('认证信息已过期')
+        if token.created < (datetime.datetime.now() - datetime.timedelta(hours=20)).replace(tzinfo=pytz.timezone('UTC')):
+            raise exceptions.AuthenticationFailed(
+                {'status': status.HTTP_401_UNAUTHORIZED, 'msg': '登录过期，请重新登录'})
 
         if token:
             token_cache = 'token_' + key
             cache.set(token_cache, token.user, 600)
-
+        
         return token.user, token
 
     def authenticate_header(self, request):
-        print(4)
         return 'Token'

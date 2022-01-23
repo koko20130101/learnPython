@@ -39,8 +39,5 @@ class Snippet(models.Model):
 class User(AbstractUser):
     nickName = models.CharField(max_length=50, blank=True, default='')
 
-    def __str__(self):
-        return self.username
-
     class Meta:
         verbose_name = 'UserInfo'
